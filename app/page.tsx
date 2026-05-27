@@ -1,49 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import DashboardCard from "@/components/DashboardCard";
+import { useEffect } from "react";
 
-export default function Dashboard() {
+export default function Home(){
 
-    const [jobs,setJobs] = useState([]);
+    useEffect(()=>{
 
-    useEffect(() => {
-
-        fetch("/api/jobs")
-        .then(r=>r.json())
-        .then(data=>setJobs(data));
+        window.location.href="/login";
 
     },[]);
 
-    return (
+    return(
 
-        <main className="min-h-screen p-8">
+        <main className="min-h-screen flex items-center justify-center">
 
-            <h1 className="text-4xl font-bold mb-8">
-                TruckTruck Dashboard
+            <h1 className="text-2xl">
+
+                Loading...
+
             </h1>
-
-            <div className="grid grid-cols-3 gap-6">
-
-                <DashboardCard
-                    title="Jobs"
-                    description={`${jobs.length} jobs`}
-                />
-
-                <DashboardCard
-                    title="Drivers"
-                    description="0 drivers"
-                />
-
-                <DashboardCard
-                    title="Customers"
-                    description="0 customers"
-                />
-
-            </div>
 
         </main>
 
-    );
+    )
 
 }
