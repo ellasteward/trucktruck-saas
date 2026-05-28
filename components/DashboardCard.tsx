@@ -1,27 +1,51 @@
-type CardProps = {
-  title: string;
-  description: string;
-};
+
+type Props = {
+
+    title: string;
+    value: string;
+    description: string;
+
+}
 
 export default function DashboardCard({
-  title,
-  description,
-}: CardProps) {
+    title,
+    value,
+    description
+}: Props) {
 
-  return (
+    return (
 
-    <div className="border rounded-xl p-6 hover:shadow-lg cursor-pointer">
+        <div
+            className="
+            bg-white
+            rounded-2xl
+            shadow-sm
+            border
+            border-zinc-200
+            p-6
+            "
+        >
 
-      <h2 className="font-bold text-xl">
-        {title}
-      </h2>
+            <p className="text-zinc-500 text-sm mb-2">
 
-      <p className="mt-2 text-gray-400">
-        {description}
-      </p>
+                {title}
 
-    </div>
+            </p>
 
-  );
+            <h2 className="text-4xl font-bold mb-2">
+
+                {value}
+
+            </h2>
+
+            <p className="text-zinc-500">
+
+                {description}
+
+            </p>
+
+        </div>
+
+    );
 
 }

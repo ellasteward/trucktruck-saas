@@ -1,8 +1,8 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
+import DriverSidebar from "@/components/DriverSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function DriverPage(){
 
@@ -31,13 +31,13 @@ export default function DriverPage(){
 
     async function updateStatus(job:any){
 
-        let newStatus="PENDING";
+        let newStatus = "PENDING";
 
         if(job.status==="PENDING")
-            newStatus="IN_PROGRESS";
+            newStatus = "IN_PROGRESS";
 
         else if(job.status==="IN_PROGRESS")
-            newStatus="COMPLETED";
+            newStatus = "COMPLETED";
 
         else
             return;
@@ -69,84 +69,262 @@ export default function DriverPage(){
     },[]);
 
     return(
+
         <ProtectedRoute
-        allowedRoles={["DRIVER"]}
+            allowedRoles={["DRIVER"]}
         >
 
-        <main className="min-h-screen">
+            <div className="flex bg-zinc-100 min-h-screen">
 
-            <Navbar/>
+                <DriverSidebar />
 
-            <div className="p-8">
+                <main className="flex-1 p-10">
 
-                <h1 className="text-4xl font-bold mb-8">
+                    <h1 className="text-4xl font-bold mb-2">
 
-                    My Jobs
+                        My Jobs
 
-                </h1>
+                    </h1>
 
-                <div className="space-y-4">
+                    <p className="text-zinc-500 mb-8">
 
-                    {jobs.map((job:any)=>(
+                        View and manage your assigned deliveries
 
-                        <div
-                            key={job._id}
-                            className="border rounded-xl p-4"
-                        >
+                    </p>
 
-                            <h2>
+                    <div
+                        className="
+                        bg-white
+                        border
+                        border-zinc-200
+                        rounded-2xl
+                        overflow-hidden
+                        shadow-sm
+                        "
+                    >
 
-                                {job.pickupLocation}
-                                {" → "}
-                                {job.deliveryLocation}
+                        <table className="w-full">
 
-                            </h2>
+                            <thead className="bg-zinc-50 border-b border-zinc-200">
 
-                            <p>Date: {job.jobDate}</p>
+                                <tr className="text-left text-zinc-600">
 
-                            <p>Weight: {job.weight}kg</p>
+                                    <th className="px-6 py-4 font-semibold">
 
-                            <p>Truck: {job.truckType}</p>
+                                        Route
 
-                            <p>
+                                    </th>
 
-                                Comments:
-                                {" "}
-                                {job.comments?.join(", ")}
+                                    <th className="px-6 py-4 font-semibold">
 
-                            </p>
+                                        Date
 
-                            <p>
+                                    </th>
 
-                                Status:
-                                {" "}
-                                {job.status}
+                                    <th className="px-6 py-4 font-semibold">
 
-                            </p>
+                                        Truck
 
-                            <button
-                                className="border px-4 py-2 rounded mt-3"
-                                onClick={()=>updateStatus(job)}
-                            >
+                                    </th>
 
-                                {job.status==="PENDING" && "Start Job"}
-                                {job.status==="IN_PROGRESS" && "Complete Job"}
-                                {job.status==="COMPLETED" && "Finished"}
+                                    <th className="px-6 py-4 font-semibold">
 
-                            </button>
+                                        Weight
 
-                        </div>
+                                    </th>
 
-                    ))}
+                                    <th className="px-6 py-4 font-semibold">
 
-                </div>
+                                        Status
+
+                                    </th>
+
+                                    <th className="px-6 py-4 font-semibold text-right">
+
+                                        Action
+
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {jobs.map((job:any,index:number)=>(
+
+                                    <tr
+                                        key={job._id}
+                                        className={`
+                                        hover:bg-zinc-50
+                                        transition
+
+                                        ${
+                                            index !== jobs.length - 1
+                                            ? "border-b border-zinc-100"
+                                            : ""
+                                        }
+                                        `}
+                                    >
+
+                                        <td className="px-6 py-5 font-medium">
+
+                                            {job.pickupLocation}
+                                            {" → "}
+                                            {job.deliveryLocation}
+
+                                            <p className="text-sm text-zinc-400 mt-1">
+
+                                                {
+                                                    job.comments?.length > 0
+                                                    ? job.comments.join(", ")
+                                                    : "No comments"
+                                                }
+
+                                            </p>
+
+                                        </td>
+
+                                        <td className="px-6 py-5 text-zinc-600 whitespace-nowrap">
+
+                                            {
+                                                job.jobDate
+                                                ? new Date(job.jobDate)
+                                                .toLocaleDateString("en-NZ")
+                                                : "-"
+                                            }
+
+                                        </td>
+
+                                        <td className="px-6 py-5 text-zinc-600">
+
+                                            {job.truckType}
+
+                                        </td>
+
+                                        <td className="px-6 py-5 text-zinc-600">
+
+                                            {job.weight}kg
+
+                                        </td>
+
+                                        <td className="px-6 py-5">
+
+                                            <span
+                                                className={`
+                                                inline-block
+                                                px-3
+                                                py-1
+                                                rounded-full
+                                                text-xs
+                                                font-medium
+
+                                                ${
+                                                    job.status==="PENDING"
+                                                    ? "bg-[#F6AE2D]/10 text-[#B7791F]"
+                                                    : ""
+                                                }
+
+                                                ${
+                                                    job.status==="IN_PROGRESS"
+                                                    ? "bg-[#86BBD8]/20 text-[#33658A]"
+                                                    : ""
+                                                }
+
+                                                ${
+                                                    job.status==="COMPLETED"
+                                                    ? "bg-[#33658A]/10 text-[#2F4858]"
+                                                    : ""
+                                                }
+                                                `}
+                                            >
+
+                                                {job.status}
+
+                                            </span>
+
+                                        </td>
+
+                                        <td className="px-6 py-5 text-right">
+
+                                            <button
+                                                className={`
+                                                px-4
+                                                py-2
+                                                rounded-xl
+                                                text-sm
+                                                font-medium
+                                                transition
+
+                                                ${
+                                                    job.status==="COMPLETED"
+                                                    ? "bg-zinc-200 text-zinc-500 cursor-not-allowed"
+                                                    : "bg-[#33658A] hover:bg-[#2F4858] text-white"
+                                                }
+                                                `}
+                                                disabled={job.status==="COMPLETED"}
+                                                onClick={()=>updateStatus(job)}
+                                            >
+
+                                                {
+                                                    job.status==="PENDING"
+                                                    ? "Start Job"
+                                                    : ""
+                                                }
+
+                                                {
+                                                    job.status==="IN_PROGRESS"
+                                                    ? "Complete Job"
+                                                    : ""
+                                                }
+
+                                                {
+                                                    job.status==="COMPLETED"
+                                                    ? "Completed"
+                                                    : ""
+                                                }
+
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))}
+
+                                {jobs.length===0 && (
+
+                                    <tr>
+
+                                        <td
+                                            colSpan={6}
+                                            className="
+                                            text-center
+                                            py-16
+                                            text-zinc-500
+                                            "
+                                        >
+
+                                            No jobs assigned
+
+                                        </td>
+
+                                    </tr>
+
+                                )}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </main>
 
             </div>
 
-        </main>
         </ProtectedRoute>
 
-
-    )
+    );
 
 }
